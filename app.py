@@ -4,7 +4,7 @@ from database.db import db
 from models.user import User
 from werkzeug.security import check_password_hash
 from models.patient import Patient
-
+from models.doctor import Doctor
 
 app = Flask(__name__)
 
@@ -98,6 +98,129 @@ def nurse():
 @app.route("/patient")
 def patient():
     return "<h1>Patient Dashboard</h1>"
+
+@app.route("/patient/register")
+def patient_register():
+    return render_template("patient_register.html")
+
+
+@app.route("/patient/register", methods=["POST"])
+def save_patient():
+
+    patient = Patient(
+        fullname=request.form["fullname"],
+        age=request.form["age"],
+        gender=request.form["gender"],
+        contact=request.form["contact"],
+        address=request.form["address"],
+        blood_group=request.form["blood_group"]
+    )
+
+    db.session.add(patient)
+    db.session.commit()
+
+    return "Patient Registered Successfully!"
+
+@app.route("/patients")
+def patient_list():
+
+    patients = Patient.query.all()
+
+    return render_template(
+        "patient_list.html",
+        patients=patients
+    )
+
+@app.route("/patients/profile/<int:id>")
+def patient_profile(id):
+
+    patient = Patient.query.get_or_404(id)
+
+    return render_template("patient_profile.html", patient=patient)
+
+
+@app.route("/patients/edit/<int:id>", methods=["GET", "POST"])
+def edit_patient(id):
+
+    patient = Patient.query.get_or_404(id)
+
+    if request.method == "POST":
+
+        patient.fullname = request.form["fullname"]
+        patient.age = request.form["age"]
+        patient.gender = request.form["gender"]
+        patient.contact = request.form["contact"]
+        patient.address = request.form["address"]
+        patient.blood_group = request.form["blood_group"]
+
+        db.session.commit()
+
+        return redirect("/patients")
+
+    return render_template("edit_patient.html", patient=patient)
+
+@app.route("/doctor/register", methods=["GET", "POST"])
+def doctor_register():
+
+    if request.method == "POST":
+
+        doctor = Doctor(
+            name=request.form["name"],
+            specialization=request.form["specialization"],
+            qualification=request.form["qualification"],
+            department=request.form["department"],
+            contact=request.form["contact"],
+            email=request.form["email"],
+            available_time=request.form["available_time"]
+        )
+
+        db.session.add(doctor)
+        db.session.commit()
+
+        return redirect("/doctors")
+
+    return render_template("doctor_register.html")
+
+@app.route("/doctors")
+def doctor_list():
+
+    doctors = Doctor.query.all()
+
+    return render_template(
+        "doctor_list.html",
+        doctors=doctors
+    )
+
+@app.route("/doctor/edit/<int:id>", methods=["GET", "POST"])
+def edit_doctor(id):
+
+    doctor = Doctor.query.get_or_404(id)
+
+    if request.method == "POST":
+
+        doctor.name = request.form["name"]
+        doctor.specialization = request.form["specialization"]
+        doctor.qualification = request.form["qualification"]
+        doctor.department = request.form["department"]
+        doctor.contact = request.form["contact"]
+        doctor.email = request.form["email"]
+        doctor.available_time = request.form["available_time"]
+
+        db.session.commit()
+
+        return redirect("/doctors")
+
+    return render_template("edit_doctor.html", doctor=doctor)
+
+@app.route("/doctor/delete/<int:id>")
+def delete_doctor(id):
+
+    doctor = Doctor.query.get_or_404(id)
+
+    db.session.delete(doctor)
+    db.session.commit()
+
+    return redirect("/doctors")
 
 if __name__ == "__main__":
     app.run(debug=True)
