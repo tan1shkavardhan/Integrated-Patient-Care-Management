@@ -3,6 +3,8 @@ from werkzeug.security import generate_password_hash
 from database.db import db
 from models.user import User
 from werkzeug.security import check_password_hash
+from models.patient import Patient
+
 
 app = Flask(__name__)
 
