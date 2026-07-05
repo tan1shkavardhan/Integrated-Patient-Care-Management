@@ -5,6 +5,8 @@ from models.user import User
 from werkzeug.security import check_password_hash
 from models.patient import Patient
 from models.doctor import Doctor
+from models.appointment import Appointment
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -221,6 +223,49 @@ def delete_doctor(id):
     db.session.commit()
 
     return redirect("/doctors")
+
+
+@app.route("/appointment/register", methods=["GET", "POST"])
+def appointment_register():
+
+    if request.method == "POST":
+
+        appointment = Appointment(
+            patient_id=request.form["patient_id"],
+            doctor_id=request.form["doctor_id"],
+            appointment_date=datetime.strptime(
+                request.form["appointment_date"], "%Y-%m-%d"
+            ).date(),
+            appointment_time=datetime.strptime(
+                request.form["appointment_time"], "%H:%M"
+            ).time(),
+            reason=request.form["reason"]
+        )
+
+        db.session.add(appointment)
+        db.session.commit()
+
+        return redirect("/appointments")
+
+    patients = Patient.query.all()
+    doctors = Doctor.query.all()
+
+    return render_template(
+        "appointment_register.html",
+        patients=patients,
+        doctors=doctors
+    )
+
+
+@app.route("/appointments")
+def appointment_list():
+
+    appointments = Appointment.query.all()
+
+    return render_template(
+        "appointment_list.html",
+        appointments=appointments
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

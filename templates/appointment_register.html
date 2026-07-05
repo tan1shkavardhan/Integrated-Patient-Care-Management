@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Appointment Registration</h2>
+
+<form method="POST">
+
+<select name="patient_id">
+{% for patient in patients %}
+<option value="{{ patient.id }}">{{ patient.fullname }}</option>
+{% endfor %}
+</select>
+
+<br><br>
+
+<select name="doctor_id">
+{% for doctor in doctors %}
+<option value="{{ doctor.id }}">{{ doctor.name }}</option>
+{% endfor %}
+</select>
+
+<br><br>
+
+<input type="date" name="appointment_date" required><br><br>
+
+<input type="time" name="appointment_time" required><br><br>
+
+<input type="text" name="reason" placeholder="Reason" required><br><br>
+
+<input type="submit" value="Book Appointment">
+
+</form>
+
+</body>
+</html>
