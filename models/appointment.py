@@ -1,5 +1,6 @@
 from database.db import db
 
+
 class Appointment(db.Model):
     __tablename__ = "appointments"
 
@@ -19,5 +20,13 @@ class Appointment(db.Model):
 
     appointment_date = db.Column(db.Date, nullable=False)
     appointment_time = db.Column(db.Time, nullable=False)
-    reason = db.Column(db.String(255), nullable=False)
-    status = db.Column(db.String(20), default="Pending")
+
+    reason = db.Column(db.Text, nullable=False)
+
+    status = db.Column(
+        db.String(20),
+        default="Pending"
+    )
+
+    patient = db.relationship("Patient", backref="appointments")
+    doctor = db.relationship("Doctor", backref="appointments")

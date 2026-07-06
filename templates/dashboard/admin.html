@@ -1,0 +1,41 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row">
+
+    <div class="col-md-3 mb-4">
+        <div class="card p-3">
+            <h6>Total Patients</h6>
+            <h2>{{ total_patients }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card p-3">
+            <h6>Total Doctors</h6>
+            <h2>{{ total_doctors }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card p-3">
+            <h6>Total Appointments</h6>
+            <h2>{{ total_appointments }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card p-3">
+            <h6>Pending</h6>
+            <h2>{{ pending_appointments }}</h2>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

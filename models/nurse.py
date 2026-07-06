@@ -1,8 +1,8 @@
 from database.db import db
 
 
-class Doctor(db.Model):
-    __tablename__ = "doctors"
+class Nurse(db.Model):
+    __tablename__ = "nurses"
 
     id = db.Column(db.Integer, primary_key=True)
 
@@ -13,7 +13,5 @@ class Doctor(db.Model):
         unique=True
     )
 
-    specialization = db.Column(db.String(100), nullable=False)
-    qualification = db.Column(db.String(100), nullable=False)
     department = db.Column(db.String(100), nullable=False)
-    available_time = db.Column(db.String(100), nullable=False)
+    shift = db.Column(db.String(50), nullable=False)
